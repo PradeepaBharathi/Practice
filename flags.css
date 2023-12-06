@@ -1,0 +1,38 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    background-color: lightblue;
+}
+img{
+    height: 70px;
+    width: 70px;
+}
+#container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:center ;
+    align-items: center;
+}
+.card{
+    border: 7px solid lightgreen;
+    border-radius: 10px;
+    margin: 10px;
+    width: calc(100% - 20px);
+     max-width: 250px;
+ text-align: center;
+     
+}
+#main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#search{
+    margin: 20px;
+    width: 200px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 5px;
+}

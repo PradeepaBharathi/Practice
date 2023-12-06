@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Information</title>
+</head>
+
+<body>
+    <h1>Stock Information</h1>
+
+    <label for="dateInput">Enter Date (d-mmmm-yyyy): </label>
+    <input type="text" id="dateInput" placeholder="5-January-2000">
+    <button onclick="fetchStockInformation()">Get Stock Information</button>
+
+    <div id="stockResult">
+        <!-- Stock information will be displayed here -->
+    </div>
+
+    <script>
+        async function fetchStockInformation() {
+            const dateInput = document.getElementById('dateInput').value;
+            const stockResultDiv = document.getElementById('stockResult');
+
+            try {
+                const stockRecord = await getStockInformation(dateInput);
+                console.log(stockRecord)
+                if (Object.keys(stockRecord).length > 0) {
+                    stockResultDiv.innerHTML = `
+                        <p>Open: ${stockRecord.open}</p>
+                        <p>High: ${stockRecord.high}</p>
+                        <p>Low: ${stockRecord.low}</p>
+                        <p>Close: ${stockRecord.close}</p>
+                    `;
+                } else {
+                    stockResultDiv.innerHTML = '<p>No Results Found</p>';
+                }
+            } catch (error) {
+                console.error(error);
+                stockResultDiv.innerHTML = '<p>Error fetching stock information</p>';
+            }
+        }
+
+        async function getStockInformation(date) {
+            const formattedDate = formatDateForAPI(date);
+            const apiUrl = `https://jsonmock.hackerrank.com/api/stocks?date=${formattedDate}`;
+
+            try {
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const responseData = await response.json();
+                const stockData = responseData.data;
+
+                if (stockData && stockData.length > 0) {
+                    return stockData[0];
+                } else {
+                    return {};
+                }
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        function formatDateForAPI(date) {
+            const parts = date.split('-');
+            const day = parseInt(parts[0], 10);
+            const month = parts[1];
+            const year = parts[2];
+            return `${day}-${month}-${year}`;
+        }
+    </script>
+</body>
+
+</html>
